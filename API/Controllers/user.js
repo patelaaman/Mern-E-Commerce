@@ -41,7 +41,7 @@ const Users = async (req,res)=>{
     let data = await user.find().sort({createdAt:-1})
     res.json(data)
    }
-   catch(error){
+   catch(error){     
        res.json(error.message)
    }
 }
