@@ -8,6 +8,9 @@ const userRouter = require("./Routes/user")
 const productRouter = require("./Routes/product")
 // Card Router 
 const crdRouter = require("./Routes/card")
+// Address Router 
+const addRouter = require("./Routes/address")
+const cors = require("cors")
 const port =1000;
 
 //  Home Testing route 
@@ -25,6 +28,12 @@ mongoose.connect("mongodb+srv://amanpatel51251:HP2oLxIyzDDaA3Et@ecomproject.vgpv
     console.log(err);
 })
 
+app.use(cors({
+    origin:true,
+    methods:["GET","POST","PUT","DELETE"],
+    credentials:true
+}
+))
 // User Router 
 app.use("/api/user",userRouter)
 
@@ -33,6 +42,10 @@ app.use("/api/product",productRouter)
 
 // card Router 
 app.use("/api/card",crdRouter)
+
+// Address Router 
+
+app.use("/api/address",addRouter)
 
 app.listen(port ,()=>{
     console.log(`Server is Runnig on Port ${port}`)
