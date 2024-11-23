@@ -1,9 +1,19 @@
 import  { useEffect, useState } from 'react'
 import AppContext from './AppContext'
 import axios from "axios"
+import { ToastContainer, toast ,Bounce} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const AppState = (props) => {
     const url ="http://localhost:1000/api"
      const [products,setProducts] = useState([])
+
+     const [token,setToken] = useState([])
+     const [isAuthenticated,setIsAuthenticated] = useState(false)
+     const [filteredData,setFilterdData] = useState([])
+     const [userId,setUser] = useState()
+
+
      
     useEffect(()=>{
       const fetchProduct = async ()=>{
@@ -15,9 +25,22 @@ const AppState = (props) => {
         });
         console.log(p.data.prodata)
         setProducts(p.data.prodata)
+        setFilterdData(p.data.prodata)
+        userProfile();
       }
-
+       
       fetchProduct()
+    },[token])
+
+    useEffect(()=>{
+      let lstoken = localStorage.getItem("token")
+     // console.log("ls Token",lstoken)
+     if(lstoken){
+      setToken(lstoken)
+      setIsAuthenticated(true)
+     }
+      
+     //setToken(localStorage.getItem("token"))
     },[])
 
     // Register User 
@@ -33,13 +56,86 @@ const AppState = (props) => {
       });
      // alert(api.data.message)
      // console.log("User Register ",api)
+     toast.success(api.data.message, {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
       return  api.data;
     }
 
+    // Login User 
+    const login = async (email,password)=>{
+      const api = await axios.post(
+        `${url}/user/login`,
+        {email,password},
+        {
+          headers:{
+              "Content-Type":"Application/json"
+          },
+          withCredentials:true
+      });
+     // alert(api.data.message)
+     // console.log("User Register ",api)
+     toast.success(api.data.message, {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
+     // console.log("User Login",api.data)
+     setToken(api.data.token)
+     setIsAuthenticated(true)
+     localStorage.setItem("token",api.data.token)
+      return  api.data;
+    }
+
+    // Logout User 
+   const logout =()=>{
+    setIsAuthenticated(false)
+    setToken(" ")
+    localStorage.removeItem("token")
+    toast.success("LogOut Succesfully.....!", {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
+   }
+
+   // user Profile 
+   const userProfile = async ()=>{
+    const p = await axios.get(`${url}/user/profile`,{
+        headers:{
+            "Content-Type":"Application/json",
+            "Auth":token
+        },
+        withCredentials:true
+    });
+   // console.log("User Profile",p.data)
+    setUser(p.data.userId)
+  }
+   
    
   return (
     <>
-     <AppContext.Provider value={{products, register}}>
+     <AppContext.Provider value={{products, register, login,url,token,setIsAuthenticated, isAuthenticated,filteredData,setFilterdData,logout,userId}}>
         {props.children}
         </AppContext.Provider>
         </>  

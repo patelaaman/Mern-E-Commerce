@@ -1,5 +1,5 @@
 body{
-    background-color: black;
+    background-color: rgb(105, 72, 72);
     color:white;
     width: 100%;
 }
@@ -13,22 +13,24 @@ body::-webkit-scrollbar{
     justify-content: space-around;
     align-items: center;
     padding:10px;
-    background-color:rgb(88, 6, 106) ;
+    background-color: rgb(71, 17, 17); ;
     position: sticky;
+    border:1px solid rgb(187, 176, 176)
 }
 .search_bar{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: black;
+    background-color:  white;
     border-radius: 20px;
     width: 25%;
     padding:10px;
+    color: rgb(227, 178, 117);
 }
 .search_bar input{
    border:none;
-    background-color:black;
-    color: white;
+    background-color: white;
+    color: rgb(21, 18, 18);
     width: 400px;
 
 }
@@ -40,4 +42,26 @@ body::-webkit-scrollbar{
 
 .search_bar input:focus{
     outline: none;
+}
+
+.sub_bar{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    width :140%;
+    background-color: rgb(249, 248, 250);
+    color: rgb(71, 17, 17);
+    font-weight: 550;
+    font-family:'Times New Roman', Times, serif;
+    
+}
+.sub_bar .itmes{
+    padding:10px;
+    font-weight: bold;
+}
+
+.sub_bar .itmes:hover{
+    font-size: 110%;
+    background-color: rgb(203, 181, 169);
+    cursor: pointer;
 }

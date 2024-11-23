@@ -22,7 +22,8 @@ const Register = () => {
     e.preventDefault();
    
   //  alert("Your From Has Been Submitted")
-  const result =  await register(name,email,password)
+  const result =  await register(name,email,password);
+  
   if(result.success) {
     navigate("/login")
   }
