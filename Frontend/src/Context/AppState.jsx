@@ -12,11 +12,12 @@ const AppState = (props) => {
      const [isAuthenticated,setIsAuthenticated] = useState(false)
      const [filteredData,setFilterdData] = useState([])
      const [userId,setUser] = useState()
-
+     const [cart,setCart] = useState()
 
      
     useEffect(()=>{
       const fetchProduct = async ()=>{
+
         const p = await axios.get(`${url}/product/all`,{
             headers:{
                 "Content-Type":"Application/json"
@@ -30,6 +31,7 @@ const AppState = (props) => {
       }
        
       fetchProduct()
+      userCart();
     },[token])
 
     useEffect(()=>{
@@ -132,14 +134,55 @@ const AppState = (props) => {
     setUser(p.data.userId)
   }
    
+
+  // add to Cart 
+  const addToCart = async (productId,title,price,qty,imgSrc)=>{
+        
+    const api = await axios.post(`${url}/card/add`,{productId,title,price,qty,imgSrc},{
+        headers:{
+            "Content-Type":"Application/json",
+            Auth:token
+        },
+        withCredentials:true
+    });
+   // console.log("My Cart ",p)
+    toast.success(api.data.message, {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
+   
+  }
+
+  // userCart
+
+  const userCart = async (productId,title,price,qty,imgSrc)=>{
+        
+    const api = await axios.get(`${url}/card/user`,{productId,title,price,qty,imgSrc},{
+        headers:{
+            "Content-Type":"Application/json",
+            Auth:token
+        },
+        withCredentials:true
+    });
+    setCart(api.data.cart)
+   // console.log("User Cart ",api.data.card)
+   
+  }
    
   return (
     <>
-     <AppContext.Provider value={{products, register, login,url,token,setIsAuthenticated, isAuthenticated,filteredData,setFilterdData,logout,userId}}>
+     <AppContext.Provider value={{products, register, login,url,token,setIsAuthenticated, isAuthenticated,filteredData,setFilterdData,logout,userId,addToCart}}>
         {props.children}
         </AppContext.Provider>
         </>  
-  )
+  ) 
 }
 
 export default AppState
